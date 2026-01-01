@@ -1,7 +1,6 @@
 const userModel = require("../models/authModel");
-const bcrypt=require("bcrypt")
-const jwt=require("jsonwebtoken")
-
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res) => {
    const { name, email, password } = req.body;
@@ -41,18 +40,18 @@ const loginUser = async (req, res) => {
 
    try {
       const user = await userModel.findOne({ email });
-      
+
       if (!user) {
          return res.status(400).json({ success: false, message: "User doesn't exists" });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-         return res.status(400).json({sucees: false, message: "Invalid credentials" });
+         return res.status(400).json({ sucees: false, message: "Invalid credentials" });
       }
-      const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET, {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
          expiresIn: "24h",
-      });   
+      });
 
       res.status(200).json({
          success: true,
@@ -61,7 +60,7 @@ const loginUser = async (req, res) => {
          user: {
             _id: user._id,
             email: user.email,
-            token
+            token,
          },
       });
    } catch (error) {
@@ -70,7 +69,23 @@ const loginUser = async (req, res) => {
    }
 };
 
-module.exports={
+const userProfile = async (req, res) => {
+   try {
+      const userId = req.user.userId;
+      const user = userModel.findById(userId).select("-password");
+      if (!user) {
+         return res.status(404).json({ message: "User not found" });
+      }
+      
+      res.status(200).json({ success: true, message: "fetch user details", user });
+   } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.log("error on get user profile user : ", error);
+   }
+};
+
+module.exports = {
    registerUser,
-   loginUser
-}
+   loginUser,
+   userProfile
+};
