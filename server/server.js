@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRouter = require("./routes/authRoutes");
+const postRouter = require("./routes/postRoutes");
 
 const app = express();
 
@@ -15,6 +16,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/auth", userRouter);
+app.use("/api/posts", postRouter);
 
 app.get("/", (req, res) => {
    res.send("<h1>Server Running Successfully</h1>"); 
