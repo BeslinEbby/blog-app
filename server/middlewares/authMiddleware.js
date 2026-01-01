@@ -1,0 +1,19 @@
+const jwt =require("jsonwebtoken");
+const userModel =require("../models/userModel.js");
+
+const protect = async (req, res, next) => {
+   try {
+      const token = req.headers.authorization?.split(" ")[1];
+      if (!token){
+         return res.status(401).json({success:false, message: "Authorization token is required."});
+      }
+x
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = {userId: decoded.id}
+      next();
+   } catch (error) {
+      res.status(401).json({success:false, message: "Invalid request or token!", error: error.message });
+   }
+};
+
+module.exports=protect
