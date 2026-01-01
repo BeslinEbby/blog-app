@@ -1,5 +1,4 @@
 const jwt =require("jsonwebtoken");
-const userModel =require("../models/userModel.js");
 
 const protect = async (req, res, next) => {
    try {
