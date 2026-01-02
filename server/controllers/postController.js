@@ -11,17 +11,19 @@ const createPost = async (req, res) => {
 
    try {
       let imageUrl = "";
+      let cloudinaryId = "";
       
       if (req.file) {
          const result = await cloudinary.uploader.upload(`data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`);
          imageUrl = result.secure_url;
+         cloudinaryId=result.public_id
       }
       
       const post = new postModel({
          title,
          content,
-         coverImage: imageUrl,
-         author: userId,
+         coverImage: {url: imageUrl, cloudinaryId},
+         author: userId
       });
 
       await post.save();
@@ -48,13 +50,12 @@ const updatePost = async (req, res) => {
       post.content = content || post.content;
       
       if (req.file) {
+         await cloudinary.uploader.destroy(post.coverImage.cloudinaryId);
          const result = await cloudinary.uploader.upload(
             `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`
          );
-         const imageUrl = result.secure_url;
-         post.coverImage =  imageUrl
-      }else{
-        post.coverImage=post.coverImage
+         post.coverImage.url = result.secure_url || post.coverImage.url;
+         post.coverImage.cloudinaryId = result.public_id || post.coverImage.cloudinaryId;
       }
 
       await post.save();
