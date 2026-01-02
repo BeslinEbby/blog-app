@@ -104,7 +104,19 @@ const getUserPosts = async (req, res) => {
        res.status(200).json({ success: true, message: "get user posts successfully", posts });
       } catch (error) {
          res.status(500).json({ success: false, message: "Server error", error: error.message });
-         console.error("error on get all posts : ", error);
+         console.error("error on get user posts : ", error);
+      }
+   };
+   
+   const getSinglePost = async (req, res) => {
+      const postId = req.params.postId;
+      try {
+         const post = await postModel.findById(postId).populate("author", "name email");
+         if (!post) return res.status(404).json({ success: false, message: "Post not found" });
+         res.status(200).json({ success: true, message: "finds post successfully", post });
+      } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on find sibgle post : ", error);
    }
 };
 
@@ -114,4 +126,5 @@ module.exports = {
    deletePost,
    getAllPosts,
    getUserPosts,
+   getSinglePost
 };
