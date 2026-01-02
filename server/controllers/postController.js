@@ -120,11 +120,35 @@ const getUserPosts = async (req, res) => {
    }
 };
 
+const updatePostLikes = async (req, res) => {
+   const postId = req.params.postId;
+   const userId = req.user.userId;
+
+   try {
+      const post = await postModel.findById(postId);
+      if (!post) return res.status(404).json({ success: false, message: "Post not found" });
+
+      const alreadyLiked = post.likes.some((id) => id === userId);
+      if (alreadyLiked) {
+         post.likes = post.likes.filter((id) => id !== userId);
+      } else {
+         post.likes.push(userId);
+      }
+
+      await post.save();
+      res.status(200).json({ success: true, message: "updates like successfully", post });
+   } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on update likes : ", error);
+   }
+};
+
 module.exports = {
    createPost,
    updatePost,
    deletePost,
    getAllPosts,
    getUserPosts,
-   getSinglePost
+   getSinglePost,
+   updatePostLikes
 };
