@@ -66,7 +66,27 @@ const updatePost = async (req, res) => {
    }
 };
 
+const deletePost = async (req, res) => {
+   const postId = req.params.postId;
+   const userId = req.user.userId;
+   try {
+      const post = await postModel.findById(postId);
+      if (!post) return res.status(404).json({ success: false, message: "Post not found" });
+
+      if (post.author !== userId) {
+         return res.status(403).json({ success: false, message: "Not authorized" });
+      }
+
+      await post.deleteOne();
+      res.status(200).json({ success: true, message: "Post deleted successfully" });
+   } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on delete post : ", error);
+   }
+};
+
 module.exports={
     createPost,
-    updatePost
+    updatePost,
+    deletePost
 }
