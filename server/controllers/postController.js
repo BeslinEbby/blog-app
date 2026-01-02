@@ -95,9 +95,23 @@ const getAllPosts = async (req, res) => {
    }
 };
 
-module.exports={
-    createPost,
-    updatePost,
-    deletePost,
-    getAllPosts
-}
+const getUserPosts = async (req, res) => {
+    const userId=req.user.userId
+    
+    try {
+       const posts = await postModel.find({author: userId}).populate("author", "name email");
+       
+       res.status(200).json({ success: true, message: "get user posts successfully", posts });
+      } catch (error) {
+         res.status(500).json({ success: false, message: "Server error", error: error.message });
+         console.error("error on get all posts : ", error);
+   }
+};
+
+module.exports = {
+   createPost,
+   updatePost,
+   deletePost,
+   getAllPosts,
+   getUserPosts,
+};
