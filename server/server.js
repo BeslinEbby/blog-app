@@ -5,6 +5,7 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
+const commentRouter  = require("./routes/commentRouter");
 
 const app = express();
 
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/api/auth", userRouter);
 app.use("/api/posts", postRouter);
+app.use("/api/posts/comments", commentRouter);
 
 app.get("/", (req, res) => {
    res.send("<h1>Server Running Successfully</h1>"); 
