@@ -85,8 +85,19 @@ const deletePost = async (req, res) => {
    }
 };
 
+const getAllPosts = async (req, res) => {
+   try {
+      const posts = await postModel.find().populate("author", "name email");
+      res.status(200).json({ success: true, message: "get all posts successfully", posts });
+   } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on get all posts : ", error);
+   }
+};
+
 module.exports={
     createPost,
     updatePost,
-    deletePost
+    deletePost,
+    getAllPosts
 }
