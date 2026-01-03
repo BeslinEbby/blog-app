@@ -1,8 +1,11 @@
 import React from 'react'
+import { AuthProvider } from './context/AuthContext'
 
 const App = () => {
   return (
-    <div>App</div>
+    <div>
+      <AuthProvider></AuthProvider>
+    </div>
   )
 }
 
