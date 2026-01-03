@@ -62,8 +62,21 @@ const updateComment = async (req, res) => {
    }
 };
 
+const allCommentsByPost = async (req, res) => {
+   try {
+      const { postId } = req.params;
+      const comments = await commentModel.find({ post: postId }).populate("author", "name email")
+
+      res.status(200).json({ success: true, message: "all comments fetched", comments });
+   } catch (error) {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on find comments by post : ", error);
+   }
+};
+
 module.exports = {
    addComment,
    deleteComment,
    updateComment,
+   allCommentsByPost
 };
