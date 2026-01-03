@@ -1,11 +1,14 @@
 import React from 'react'
 import { AuthProvider } from './context/AuthContext'
+import Header from './components/Header'
 
 const App = () => {
   return (
-    <div>
-      <AuthProvider></AuthProvider>
-    </div>
+    <>
+      <AuthProvider>
+        <Header/>
+      </AuthProvider>
+    </>
   )
 }
 
