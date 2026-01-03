@@ -4,7 +4,7 @@ const addComment = async (req, res) => {
    try {
       const { content } = req.body;
       const { postId } = req.params;
-      const {userId}=req.user
+      const { userId } = req.user;
 
       const post = await postModel.findById(postId);
       if (!post) return res.status(404).json({ success: false, message: "Post not found" });
@@ -27,8 +27,8 @@ const addComment = async (req, res) => {
 };
 
 const deleteComment = async (req, res) => {
-   const {commentId}=req.params;
-   const {userId}=req.user;
+   const { commentId } = req.params;
+   const { userId } = req.user;
    try {
       const comment = await commentModel.findById(commentId);
       if (!comment) return res.status(404).json({ success: false, message: "Comment not found" });
@@ -47,7 +47,23 @@ const deleteComment = async (req, res) => {
    }
 };
 
+const updateComment = async (req, res) => {
+   try {
+      const { content } = req.body;
+      const { commentId } = req.params;
+
+      const comment = await commentModel.findByIdAndUpdate(commentId, { content }, {new: true});
+      if (!comment) return res.status(404).json({ success: false, message: "Comment not found" });
+
+      res.status(200).json({ success: true, message: "comment updates successfully", comment });
+   } catch {
+      res.status(500).json({ success: false, message: "Server error", error: error.message });
+      console.error("error on update comment :", error);
+   }
+};
+
 module.exports = {
    addComment,
    deleteComment,
+   updateComment,
 };
