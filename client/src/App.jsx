@@ -6,6 +6,7 @@ import {ToastContainer} from "react-toastify"
 import Home from './pages/Home'
 import Login from './pages/Login'
 import MyPosts from './pages/MyPosts'
+import CreatePost from './pages/CreatePost'
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
         <Routes>
           <Route path='/' element={<Home/>} />
           <Route path='/myposts' element={<MyPosts/>} />
+          <Route path='/create' element={<CreatePost/>} />
           <Route path='/login' element={<Login/>} />
         </Routes>
       </AuthProvider>
