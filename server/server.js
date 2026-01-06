@@ -1,7 +1,7 @@
 const express = require("express");
+const dotenv = require("dotenv").config();;
 const cors = require("cors");
 const bodyParser = require("body-parser");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const userRouter = require("./routes/authRoutes");
 const postRouter = require("./routes/postRoutes");
@@ -9,7 +9,7 @@ const commentRouter  = require("./routes/commentRouter");
 
 const app = express();
 
-dotenv.config();
+
 connectDB();
 
 app.use(express.json());
