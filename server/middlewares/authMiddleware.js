@@ -6,7 +6,6 @@ const protect = async (req, res, next) => {
       if (!token){
          return res.status(401).json({success:false, message: "Authorization token is required."});
       }
-x
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
       req.user = {userId: decoded.id}
       next();
